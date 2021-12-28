@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -39,5 +42,45 @@ class CourseRepositoryTest {
                 .build();
 
         courseRepository.save(course);
+    }
+
+    @Test
+    public void findAllPagination() {
+        Pageable firstPage = PageRequest.of(0, 1);
+        List<Course> pageOfCourses = courseRepository.findAll(firstPage).getContent();
+        logger.info("Courses from page : {}", pageOfCourses);
+        long totalElements = courseRepository.findAll(firstPage).getTotalElements();
+        int totalPages = courseRepository.findAll(firstPage).getTotalPages();
+        logger.info("Total Elements : {}, Total Pages : {}", totalElements, totalPages);
+    }
+
+    @Test
+    public void findAllSorting() {
+        Pageable sortByTitle =
+                PageRequest.of(
+                        0,
+                        2,
+                        Sort.by("title")
+                );
+        Pageable sortByCreditDesc =
+                PageRequest.of(
+                        0,
+                        2,
+                        Sort.by("credit").descending()
+                );
+
+        Pageable sortByTitleAndCreditDesc =
+                PageRequest.of(
+                        0,
+                        2,
+                        Sort.by("title")
+                                .descending()
+                                .and(Sort.by("credit"))
+                );
+
+        List<Course> courses
+                = courseRepository.findAll(sortByTitle).getContent();
+
+        logger.info("Courses Sorted : {}", courses);
     }
 }
