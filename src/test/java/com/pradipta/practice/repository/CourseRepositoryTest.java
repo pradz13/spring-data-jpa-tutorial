@@ -1,6 +1,7 @@
 package com.pradipta.practice.repository;
 
 import com.pradipta.practice.entity.Course;
+import com.pradipta.practice.entity.Student;
 import com.pradipta.practice.entity.Teacher;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -82,5 +83,31 @@ class CourseRepositoryTest {
                 = courseRepository.findAll(sortByTitle).getContent();
 
         logger.info("Courses Sorted : {}", courses);
+    }
+
+
+    @Test
+    public void saveCourseWithStudentAndTeacher() {
+        Teacher teacher = Teacher.builder()
+                .firstName("Lizze")
+                .lastName("Morgan")
+                .build();
+
+        Student student = Student.builder()
+                .firstName("Abhishek")
+                .lastName("Singh")
+                .emailId("abhishek@gmail.com")
+                .build();
+
+        Course course = Course
+                .builder()
+                .title("AI")
+                .credit(12)
+                .teacher(teacher)
+                .build();
+
+        course.addStudents(student);
+
+        courseRepository.save(course);
     }
 }
