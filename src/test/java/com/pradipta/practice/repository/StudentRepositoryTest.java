@@ -58,7 +58,7 @@ class StudentRepositoryTest {
     }
 
     @Test
-    public void printStudentByFirstName() {
+    public void printStudentExample() {
         List<Student> studentList = studentRepository.findByFirstName("Pradipta");
         logger.info("Student List with passed first name : {}", studentList);
 
@@ -67,5 +67,14 @@ class StudentRepositoryTest {
 
         List<Student> studentListWithNotNullLastName = studentRepository.findByLastNameNotNull();
         logger.info("Student List with not null last names : {}", studentListWithNotNullLastName);
+
+        Student studentByEmail = studentRepository.getStudentByEmailAddress("pradipta.nag2@gmail.com");
+        logger.info("Student by Email : {}", studentByEmail);
+
+        Student studentByEmailNative = studentRepository.getStudentByEmailAddressNative("pradipta.nag2@gmail.com");
+        logger.info("Student by Email Native : {}", studentByEmailNative);
+
+        Student studentByEmailAddressNativeNamedParam = studentRepository.getStudentByEmailAddressNativeNamedParam("pradipta.nag2@gmail.com");
+        logger.info("Student by Email Native Named Param : {}", studentByEmailAddressNativeNamedParam);
     }
 }
